@@ -9,27 +9,31 @@
  * @version 0.1.0
  * @since 0.1.0
  */
+const CONTEXT_CLASS_NAME = 'zindex-level-context';
+const CONTEXT_TIP_CLASS_NAME = 'zindex-level-context-tip';
 
 const randomColor = () => {
-    const random = () => (((Math.random() * 1e6) | 0 )% 256);
+    const random = () => (((Math.random() * 1e6) | 0) % 256);
     const red = random();
     const green = random();
     const blue = random();
     return `rgb(${red},${green},${blue})`;
 };
 
-const detect = (node, level) => {
+const css = (node, key) => window.getComputedStyle(node, null)[key];
+
+const detect = node => {
     const $node = $(node);
-    const position = $node.css('position');
-    const zIndex = $node.css('z-index');
+    const position = css(node, 'position');
+    const zIndex = css(node, 'z-index');
 
     $node.children().each((idx, child) => {
-        detect(child, level);
+        detect(child);
     });
     if (undefined !== position && 'static' !== position && !isNaN(zIndex)) {
-        $node.addClass('zindex-level-context').css('outline-color', randomColor());
+        $node.addClass(CONTEXT_CLASS_NAME).css('outline-color', randomColor());
 
-        $node.append($('<div/>').addClass('zindex-level-context-tip').text(zIndex).css({
+        $node.append($('<div/>').addClass(CONTEXT_TIP_CLASS_NAME).text(zIndex).css({
             left: 0,
             top: 0
         }));
@@ -37,5 +41,13 @@ const detect = (node, level) => {
 };
 
 chrome.runtime.onMessage.addListener(message => {
-    detect(document.body, 600);
+    const tagClassName = 'zindex-level-context-extension';
+    if (document.body.classList.contains(tagClassName)) {
+        Array.prototype.forEach.call(document.querySelectorAll('.' + CONTEXT_CLASS_NAME), node => node.classList.remove(CONTEXT_CLASS_NAME));
+        Array.prototype.forEach.call(document.querySelectorAll('.' + CONTEXT_TIP_CLASS_NAME), node => node.parentNode.removeChild(node));
+        document.body.classList.remove(tagClassName);
+    } else {
+        document.body.classList.add(tagClassName);
+        detect(document.body);
+    }
 });
