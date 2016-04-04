@@ -1,0 +1,29 @@
+{
+    "manifest_version": 2,
+    "name": "z-index display",
+    "description": "Show z-index",
+    "version": "1.0.0",
+    "permissions": [
+        "tabs",
+        "background"
+    ],
+    "content_scripts": [{
+        "matches": ["*://*/*", "file:///*"],
+        "js": ["3rd/jquery.js", "content.js"]
+    }],
+    "icons": {
+        "256": "img/icons/icon_256.png",
+        "128": "img/icons/icon_128.png",
+        "64": "img/icons/icon_64.png",
+        "32": "img/icons/icon_32.png"
+    },
+    "background": {
+        "scripts": ["background.js"]
+    },
+    "browser_action": {
+        "default_icon": "favicon.png"
+    },
+    "web_accessible_resources": [
+        "favicon.png"
+    ]
+}
