@@ -1,0 +1,27 @@
+/**
+  * Copyright (C) 2016 yanni4night.com
+  * content.css
+  *
+  * changelog
+  * 2016-04-04[15:01:13]:revised
+  *
+  * @author yanni4night@gmail.com
+  * @version 0.1.0
+  * @since 0.1.0
+  */
+.zindex-level-context {
+    outline: 2px dashed red;
+}
+
+.zindex-level-context:hover {
+    outline-offset: 5px;
+}
+
+.zindex-level-context-tip {
+    background-color: rgba(255, 0, 0, 0.6);
+    position: absolute !important;
+    color: #fff !important;
+    z-index: 100000 !important;
+    font-size: 12px !important;
+    padding: 3px  !important;
+}
