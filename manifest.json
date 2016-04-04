@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
-    "name": "z-index display",
-    "description": "Show z-index",
+    "name": "zIndex Level Context Display",
+    "description": "Show z-index level context",
     "version": "1.0.0",
     "permissions": [
         "tabs",
@@ -9,7 +9,7 @@
     ],
     "content_scripts": [{
         "matches": ["*://*/*", "file:///*"],
-        "js": ["3rd/jquery.js", "content.js"],
+        "js": ["content.js"],
         "css": ["content.css"]
     }],
     "icons": {

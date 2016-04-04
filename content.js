@@ -20,23 +20,38 @@ const randomColor = () => {
     return `rgb(${red},${green},${blue})`;
 };
 
-const css = (node, key) => window.getComputedStyle(node, null)[key];
+const camelCase = str => str.replace(/\-([a-z])/mg, (m, $1, $2) => $1.toUpperCase());
+
+const css = (node, key, ...args) => {
+    if (args.length) {
+        // set
+        node.style[camelCase(key)] = args[0];
+    } else {
+        // get
+        return window.getComputedStyle(node, null)[key];
+    }
+}
 
 const detect = node => {
-    const $node = $(node);
     const position = css(node, 'position');
     const zIndex = css(node, 'z-index');
 
-    $node.children().each((idx, child) => {
-        detect(child);
+    Array.prototype.forEach.call(node.childNodes, child => {
+        if (child.nodeName && 1 === child.nodeType) {
+            detect(child);
+        }
     });
-    if (undefined !== position && 'static' !== position && !isNaN(zIndex)) {
-        $node.addClass(CONTEXT_CLASS_NAME).css('outline-color', randomColor());
 
-        $node.append($('<div/>').addClass(CONTEXT_TIP_CLASS_NAME).text(zIndex).css({
-            left: 0,
-            top: 0
-        }));
+    if (undefined !== position && 'static' !== position && !isNaN(zIndex)) {
+        node.classList.add(CONTEXT_CLASS_NAME);
+        css(node, 'outline-color', randomColor());
+
+        let tip = document.createElement('div');
+        tip.classList.add(CONTEXT_TIP_CLASS_NAME);
+        tip.innerText = zIndex;
+        css(tip, 'left', 0);
+        css(tip, 'top', 0);
+        node.appendChild(tip);
     }
 };
 
